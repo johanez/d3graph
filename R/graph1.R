@@ -7,14 +7,16 @@ data(MisNodes)
 
 
 
-nodes <- read.csv("nodes1.csv", header = T)
-links <- read.csv("links.csv", header = T)
-links[,1:2] <- links[,1:2]-1
-links$value <- 1
+nodes <- read.csv("../data/nodes1.csv", header = T)
+links <- read.csv("../data/links.csv", header = T)
 
 # Create graph
 forceNetwork(Links = links, Nodes = nodes, Source = "source", charge=-100,
-             Target = "target", Value = "value", NodeID = "name",
+             Target = "target", Value = "value", NodeID = "id",
+             Group = "group", opacity = 0.8, linkDistance = "function(d){return 10- Math.sqrt(d.value)}")
+
+d3ForceNetwork(Links = links, Nodes = nodes, Source = "source", charge=-100,
+             Target = "target", Value = "value", NodeID = "id",
              Group = "group", opacity = 0.8, linkDistance = "function(d){return 10- Math.sqrt(d.value)}")
 
 nodes <- data.frame(id=c(1,2), group=1)
