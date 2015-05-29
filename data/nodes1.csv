@@ -1,0 +1,26 @@
+id,name,group,weight
+0,Msc Geoinformation,1,5
+1,Bsc Economics,1,4
+2,Internship Reference Database,2,5
+3,Internship Low Carbon Farming,2,3
+4,Research Assitant Landcover,2,5
+5,Study Assitant Earth observation,2,3
+6,Wageningen,3,5
+7,Fiji,3,3
+8,India,3,3
+9,Berlin,3,3
+10,Heidelberg,3,4
+11,Scripting,5,5
+12,R,5,4
+13,python,5,3
+14,JavaScript,5,3
+15,HTML,5,2
+16,CSS,5,2
+17,Geoinformation,5,5
+18,ArcGIS,5,4
+19,QGIS,5,4
+20,ERDAS,5,2
+21,gdal,5,3
+22,Improvisation Theater,5,3
+23,Learning,5,3
+24,Skills,5,5
