@@ -36,6 +36,7 @@ d3.csv("nodes1.csv", function(d) {
     //.on("mouseover", mouseover)
     //.on("mouseout", mouseout)
     .call(force.drag);
+    force.start();
 
 });
 
