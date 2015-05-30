@@ -12,12 +12,20 @@ var force = d3.layout.force()
     .charge(-100)
     .size([width, height]);
 
+// queue()
+//   .defer(d3.csv, "nodes1.csv")
+//   .defer(d3.csv, "links.csv")
+//   .await(ready);
+// //Main function
+
+// function ready(error, world, countryData, mpoints) {
+
 d3.csv("nodes1.csv", function(d) {
   return {
     id: d.id, // convert "Year" column to Date
     text: d.name,
     group: d.group,
-    weight: +d.weight // convert "Length" column to number
+    weight: +d.weight // convert "Length" column to numberP
   };
 }, function(error, rows) {
   console.log(rows[0]);
@@ -30,15 +38,61 @@ d3.csv("nodes1.csv", function(d) {
     .attr("class", "node")
     .style("fill", function(d) { 
       console.log(d.group);
+      console.log(d.weight);
+      console.log(Math.exp(6-d.weight));
       return color(d.group); 
     })
     .style("opacity", 0.4)
     //.on("mouseover", mouseover)
     //.on("mouseout", mouseout)
     .call(force.drag);
-    force.start();
+
+  var links ={};
+
+  node.append("circle")
+    .attr("r", function(d) {return  20 + Math.exp(6-d.weight)*0.2});
+
+  node.append("svg:text")
+    .attr("class", "nodetext")
+    .attr("text-anchor", "middle")
+    .attr("dx", 0)
+    .attr("dy", ".35em")
+    .style("font-size", function(d) { return 24 - (d.weight*2) + "px"})
+    .text(function(d) { return d.text });
+
+  function tick() {
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  }
+
+  force
+    .on("tick", tick)
+    .start();
 
 });
+
+function wrap(text, width) {
+  text.each(function() {
+    var text = d3.select(this),
+        words = text.text().split(/\s+/).reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 1.1, // ems
+        y = text.attr("y"),
+        dy = parseFloat(text.attr("dy")),
+        tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+      }
+    }
+  });
+}
 
 
 
