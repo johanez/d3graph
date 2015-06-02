@@ -18,7 +18,7 @@ var scaleFont = d3.scale.log()
                     .range([2.5,0.5]);
 var scaleLength = d3.scale.log()
                     .domain([1,30])
-                    .range([1.1,0.7]);
+                    .range([1.2,0.4]);
 
 
 var force = d3.layout.force()
@@ -64,7 +64,7 @@ function ready(error, nodesJson, linksJson) {
     });
 
   var insertLinebreaks = function (t, text, rank) {
-      var width = getRadius(rank)*1.75;
+      var width = getRadius(rank)*1.95;
       var fsize = scaleFont(rank+1) *scaleLength(text.length);//Math.log(getRadius(rank)) // (Math.exp(text.length * 0.001));
       var el = d3.select(t);
       var p = d3.select(t.parentNode);
@@ -84,16 +84,6 @@ function ready(error, nodesJson, linksJson) {
 
   };
 
-  // var edges = [];
-  // console.log(edges);
-  // linksJson.forEach(function(e) { 
-  //   var sourceNode = nodesJson.filter(function(n) { return n.id === e.source; })[0],
-  //       targetNode = nodesJson.filter(function(n) { return n.id === e.target; })[0];
-  //   //console.log(targetNode);
-  //   edges.push({source: sourceNode, target: targetNode, value: e.value});
-  // });
-   
-  // console.log(nodesJson);
 
   // add nodes to force
   force
@@ -130,61 +120,18 @@ function ready(error, nodesJson, linksJson) {
       height: 100 // bounding box is 600 pixels tall
   };
 
-  // fObjects = node.append("foreignObject")
-  //   .attr("x", function(d){d.x});
-  // console.log(fObjects);
-
-
-  
-  // node.append("svg:text")
-  //   .attr("class", "nodetext")
-  //   .attr("text-anchor", "middle")
-  //   .attr("dx", 0)
-  //   .attr("dy", "0.35em")
-  //   .style("font-size", function(d) { 
-  //     var ts = getRadius(d.rank)*0.5 - (Math.exp(d.text.length*0.001));
-  //     //console.log(ts);
-  //     return ts + "px";
-  //   })
-  //   .style("fill", "#000")
-  //   .text(function(d) { return d.text })
-    
-    /*.textwrap(function(d){
-      var bounds={x:d.x-d.r, y:d.y-d.r, width:d.r*2, height:d.r*2};
-      console.log(bounds);
-      return bounds;    // function(d) {
-    //    return (getRadius(d.rank) * 2)-100;
-    // });
-    });*/
-    //.call(wrap, 100);
-    //function(d) {
-    //   console.log(d);
-    //    return (getRadius(d.rank) * 2)-100;
-    // });
-
-    //d3.select('text').textwrap(bounds);//function(d) {
-    //   console.log(d);
-    //   //console.log(i);
-    //   // var bounds={x:d.x-d.r, y:d.y-d.r, width:d.r*2, height:d.r*2};
-    //   console.log(bounds);
-    //   return bounds;
-    //     // code to dynamically determine bounds
-    //     // for each text node goes here
-    // });
-
-
+ 
   var padding = 1; // separation between circles
   function collide(alpha) {
-    var quadtree = d3.geom.quadtree(force.nodes);
-    console.log(quadtree);
-    return function(d) {
-      var radius = scaleRadius(d.rank);
-      var rb = 2*radius + padding,
+    var quadtree = d3.geom.quadtree(node);
+    //console.log(quadtree);
+     return function(d) {
+      var radius = scaleRadius(d.rank),
+          rb = radius + 50 + padding,
           nx1 = d.x - rb,
           nx2 = d.x + rb,
           ny1 = d.y - rb,
           ny2 = d.y + rb;
-          debugger;
       quadtree.visit(function(quad, x1, y1, x2, y2) {
         if (quad.point && (quad.point !== d)) {
           var x = d.x - quad.point.x,
@@ -204,65 +151,23 @@ function ready(error, nodesJson, linksJson) {
   }
 
   function tick() {
-    link.attr("x1", function (d) {
-          return d.source.x;
-        })
-        .attr("y1", function (d) {
-            return d.source.y;
-        })
-        .attr("x2", function (d) {
-            return d.target.x;
-        })
-        .attr("y2", function (d) {
-            return d.target.y;
-        });
+    link
+      .attr("x1", function (d) {
+        return d.source.x;
+      })
+      .attr("y1", function (d) {
+        return d.source.y;
+      })
+      .attr("x2", function (d) {
+        return d.target.x;
+      })
+      .attr("y2", function (d) {
+        return d.target.y;
+      });
         
-        node.attr("cx", function (d) {
-            return d.x;
-        })
-            .attr("cy", function (d) {
-            return d.y;
-        });
-        node.each(collide(0.5)); 
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    node.each(collide(0.5)); 
   }
-
-
-
-  function wrap(text, width) {
-    
-    text.each(function() {
-      
-      var text = d3.select(this),
-          words = text.text().split(/\s+/).reverse(),
-          word,
-          line = [],
-          lineNumber = 0,
-          lineHeight = 0.5, // ems
-          y = text.attr("y"),
-          dy = parseFloat(text.attr("dy"));
-          tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-
-      while (word = words.pop()) {
-        console.log(word);
-        line.push(word);
-        console.log(line);
-        tspan.text(line.join(" "));
-        //console.log(tspan.node().getComputedTextLength());
-        //console.log(width);
-        if (tspan.node().getComputedTextLength() > width && line.length > 1) {
-        // if(line.length > 1) 
-          
-          line.pop(); 
-          tspan.text(line.join(" "));
-          line = [word];
-          console.log(++lineNumber);
-
-          tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-        }
-      }
-    });
-  }
-
 
   force
     .linkDistance(function(d){
