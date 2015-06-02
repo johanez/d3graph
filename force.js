@@ -2,6 +2,7 @@ var width=1000;
 var height=800;
 var color = d3.scale.category10();
 
+
 var svg = d3.select("body").append("svg")
 	.attr("width", width)
 	.attr("height", height);
@@ -15,15 +16,17 @@ var scaleRadius = d3.scale.log()
                     .range([100,15]);
 var scaleFont = d3.scale.log()
                     .domain([1,6])
-                    .range([2.5,0.5]);
+                    .range([2.8,0.5]);
 var scaleLength = d3.scale.log()
                     .domain([1,30])
                     .range([1.2,0.4]);
 
 
 var force = d3.layout.force()
-    .gravity(.05)
-    .charge(-200)
+    .gravity(.06)
+    .charge(-300)
+    .linkStrength(0.2)
+    .friction(0.9)
     .size([width, height]);
 
 queue()
@@ -102,7 +105,7 @@ function ready(error, nodesJson, linksJson) {
     .style("fill", function(d) {
       return color(d.group); 
     })
-    .style("opacity", 0.9)
+    .style("opacity", function(d){return 1-(d.rank*0.2)})
     //.on("mouseover", mouseover)
     //.on("mouseout", mouseout)
     .call(force.drag);
@@ -216,7 +219,7 @@ function ready(error, nodesJson, linksJson) {
       .attr("r", 5);
 
   node.append("svg:a")
-      .attr("xlink:href", function(d){return d.Url;})
+      .attr("xlink:href", hfunction(d){return d.Url;})
       .append("text")
       .attr("dx", 12)
       .attr("dy", ".35em")

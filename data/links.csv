@@ -14,7 +14,7 @@ wur,study_ass,1
 research_ass,rs,2
 research_ass,esa,5
 esa,italy,1
-italy,italian,6
+italy,italian,3
 learn,js,7
 learn,study_ass,10
 learn,italian,7
@@ -24,7 +24,7 @@ code,html,1
 code,css,1
 code,python,1
 code,linux,1
-code,sql,5
+code,sql,3
 r,gdal,5
 python,gdal,4
 python,qgis,5
