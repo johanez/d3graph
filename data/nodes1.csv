@@ -1,6 +1,6 @@
 index,id,name,group,rank
 0,jo,Johannes Eberenz,jo,0
-1,geo,Geoinformation,geo,1
+1,geo,Geo Information,geo,1
 2,code,Code,code,1
 3,theater,Theater,theater,1
 4,wur,WUR,companies,2
@@ -29,13 +29,13 @@ index,id,name,group,rank
 27,embrace,embrace,theater,3
 28,interact,interact,theater,3
 29,maps,Maps,places,3
-30,esa,ESA,companies,5
+30,esa,ESA,companies,4
 31,italy,Italy,places,5
 32,italian,Italian,theater,5
 33,giz,GIZ,companies,5
 34,schwarz,Black Forest,places,4
 35,lindy,Lindy Hop,theater,4
-36,msc,Msc Geoinformation Science,edu,3
-37,ba,Bachelor Economics,edu,2
-38,msr,Courses Msc Natural Resource Management,edu,2
+36,msc,Msc Geo Information Science,edu,2
+37,ba,Bachelor Economics,edu,3
+38,msr,Courses Msc Natural Resource Management,edu,3
 39,erasmus,Erasmus,edu,4

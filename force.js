@@ -16,16 +16,16 @@ var scaleRadius = d3.scale.log()
                     .range([100,15]);
 var scaleFont = d3.scale.log()
                     .domain([1,6])
-                    .range([2.8,0.5]);
+                    .range([85,10]);
 var scaleLength = d3.scale.log()
-                    .domain([1,30])
-                    .range([1.2,0.4]);
+                    .domain([1,20])
+                    .range([1,0.15]);
 
 
 var force = d3.layout.force()
-    .gravity(.06)
+    .gravity(.04)
     .charge(-300)
-    .linkStrength(0.2)
+    .linkStrength(0.3)
     .friction(0.9)
     .size([width, height]);
 
@@ -66,12 +66,18 @@ function ready(error, nodesJson, linksJson) {
       };
     });
 
+  function longerString(champ, contender){
+        return (contender.length > champ.length) ? contender: champ;
+  }
+
   var insertLinebreaks = function (t, text, rank) {
       var width = getRadius(rank)*1.95;
-      var fsize = scaleFont(rank+1) *scaleLength(text.length);//Math.log(getRadius(rank)) // (Math.exp(text.length * 0.001));
+      // makes this word lenght!
+      var maxWordLength = text.split(" ").reduce(longerString).length;
+      var fsize = scaleFont(rank+1) *scaleLength(maxWordLength);//Math.log(getRadius(rank)) // (Math.exp(text.length * 0.001));
       var el = d3.select(t);
       var p = d3.select(t.parentNode);
-      //console.log(fsize);
+      ;
       p.append("foreignObject")
           .attr('x', -width/2)
           .attr('y', -width/2)
@@ -80,7 +86,7 @@ function ready(error, nodesJson, linksJson) {
         // .append("xhtml:container")
         //   .attr('style',  'position:absolute;')
           .append("xhtml:div")
-            .attr('style',   ' min-height: '+ width+'px; display: flex; align-items: center; justify-content: center; vertical-align: middle; text-align: center; word-wrap: normal; fill :#fff;  font-size:' + fsize + 'em;')
+            .attr('style',   ' min-height: '+ width+'px; display: flex; align-items: center; justify-content: center; vertical-align: middle; text-align: center; word-wrap: normal; fill :#fff;  font-size:' + fsize + 'px;')
             .html(text);    
               //position:absolute; margin-right:-50%; left:50%; top:50%; transform: translate(-50%, -50%);
       //el.remove(); 
@@ -105,7 +111,7 @@ function ready(error, nodesJson, linksJson) {
     .style("fill", function(d) {
       return color(d.group); 
     })
-    .style("opacity", function(d){return 1-(d.rank*0.2)})
+    .style("opacity", function(d){return 1-(d.rank*0.1)})
     //.on("mouseover", mouseover)
     //.on("mouseout", mouseout)
     .call(force.drag);
@@ -126,20 +132,19 @@ function ready(error, nodesJson, linksJson) {
  
   var padding = 1; // separation between circles
   function collide(alpha) {
-    var quadtree = d3.geom.quadtree(node);
-    //console.log(quadtree);
+    var quadtree = d3.geom.quadtree(force.nodes());
      return function(d) {
-      var radius = scaleRadius(d.rank),
-          rb = radius + 50 + padding,
-          nx1 = d.x - rb,
-          nx2 = d.x + rb,
-          ny1 = d.y - rb,
-          ny2 = d.y + rb;
+      var radius = scaleRadius(d.rank+1),
+          nx1 = d.x - radius,
+          nx2 = d.x + radius,
+          ny1 = d.y - radius,
+          ny2 = d.y + radius;
       quadtree.visit(function(quad, x1, y1, x2, y2) {
         if (quad.point && (quad.point !== d)) {
           var x = d.x - quad.point.x,
               y = d.y - quad.point.y,
               l = Math.sqrt(x * x + y * y);
+              rb = radius + scaleRadius(quad.point.rank+1) + padding;
             if (l < rb) {
             l = (l - rb) / l * alpha;
             d.x -= x *= l;
