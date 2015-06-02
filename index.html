@@ -2,27 +2,31 @@
 <head>
 	<meta charset="utf-8">
 	<style>
+	body {
+		color:#fff;
+		background: #f0f0f0;
+	}
 	.link {
-		stroke: #666;
-		opacity: 0.4;
+		stroke: #ffe;
 		stroke-width: 1.5px;
 		}
 	.node circle {
-		stroke: #fff;
-		opacity: 0.4;
+		color: #fff;
+		opacity: 1;
 		stroke-width: 1.5px;
 	}
-		.node:not(:hover) .nodetext {
-		display: none;
-	}
+
 	text {
-		font: 7px serif;
-		opacity: 0.4;
+		font: 24px sans-serif;
+		opacity: 1;
 		pointer-events: none;
+		color: #fff;
 	}
 	</style>
 </head>
 <body> 
 	<script src="js/d3/d3.v3.min.js"></script>
+	<script src="js/d3/queue.v1.min.js"></script>
+	<script src="js/d3/textwrap/d3textwrap.v0.js"></script>	
 	<script src="force.js"></script>
 </body>
