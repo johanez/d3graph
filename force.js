@@ -1,19 +1,15 @@
-var width =window.innerWidth,
-	height=window.innerHeight-20;
+var wWidth =window.innerWidth,
+	wHeight=window.innerHeight-20;
+var fixWidth = 1200,
+	fixHeight= fixWidth*(wHeight/wWidth);
+
 
 var svg = d3.select("body")
-   .append("div")
-   // container fopr responsive svhg resizing
-   .classed("svg-container", true)
-   .append("svg")
+   .append("svg:svg")
       .classed("svg-content-responsive", true)
-       // .attr({
-       //   "width": "100%",
-       //   "height": "100%"
-       // })
-      .attr("viewBox", "0 0 " + 600*(width/height) + " " + 900*(height/width))//.attr("viewBox", "0 0 " + width + " " + height )
-      //.attr("viewBox", "0 0 " + width + " " + height)//.attr("viewBox", "0 0 " + width + " " + height )
-      .attr("preserveAspectRatio", "xMidYMid meet")
+      // aspect acording to window, widthFixed for the viewbox  scaling
+      .attr("viewBox", "0 0 " + fixWidth + " " + fixHeight)
+      .attr("preserveAspectRatio", "xMaxYMin meet")
       .attr("pointer-events", "all");
   // /  .call(d3.behavior.zoom().on("zoom", resize));
 
@@ -45,8 +41,7 @@ var force = d3.layout.force()
     .charge(-300)
     .linkStrength(0.3)
     .friction(0.9)
-    //.size([width, height]);
-    .size([900, 900*(height/width)]);
+    .size([fixWidth, fixHeight]);
 
 queue()
   .defer(d3.csv, "data/nodes1.csv", function(d){
@@ -176,6 +171,18 @@ function ready(error, nodesJson, linksJson) {
       });
     };
   }
+  function resize() {
+  	wWidth = window.innerWidth, 
+  	wHeight = window.innerHeight-20;
+  	fixHeight= fixWidth*(wHeight/wWidth);
+  	svg.attr("viewBox", "0 0 " + fixWidth + " " +fixHeight);
+  	force.size([fixWidth,fixHeight]);
+  	console.log(svg.attr("viewBox"));
+  	console.log(force.size());
+  }
+
+  resize;
+  d3.select(window).on("resize", resize);
 
   function tick() {
     link
@@ -195,18 +202,6 @@ function ready(error, nodesJson, linksJson) {
     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
     node.each(collide(0.5)); 
   }
-
-  function resize() {
-  	width = window.innerWidth, 
-  	height = window.innerHeight-20;
-  	svg.attr("viewBox", "0 0 " +  900 + " " + 900*(height/width));
-  	force.size([width, height]);
-  	console.log(svg.attr("viewBox"));
-  	console.log(force.size());
-  }
-//  svg.call(d3.behavior.zoom().on("zoom", resize));
-  resize;
-  d3.select(window).on("resize", resize);
 
   force
     .linkDistance(function(d){
