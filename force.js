@@ -24,8 +24,8 @@ var scaleLength = d3.scale.log()
 
 var force = d3.layout.force()
     .gravity(.04)
-    .charge(-300)
-    .linkStrength(0.3)
+    .charge(-400)
+    .linkStrength(0.5)
     .friction(0.9)
     .size([width, height]);
 
@@ -181,9 +181,9 @@ function ready(error, nodesJson, linksJson) {
     .linkDistance(function(d){
       //console.log((d.source.rank));
       //console.log(getRadius(d.source.rank));
-      return (getRadius(d.source.rank) +
-              getRadius(d.target.rank) +
-              (d.value-1) * 20)
+      return (scaleRadius(d.source.rank+1) +
+              scaleRadius(d.target.rank+1) +
+              (d.value-1) * 10)
     })
     .on("tick", tick)
     .start();
