@@ -80,34 +80,6 @@ function ready(error, nodesJson, linksJson) {
       };
     });
 
-  function longerString(champ, contender){
-        return (contender.length > champ.length) ? contender: champ;
-  }
-
-  var insertLinebreaks = function (t, text, rank) {
-      var width = getRadius(rank)*1.95;
-      // makes this word lenght!
-      var maxWordLength = text.split(" ").reduce(longerString).length;
-      var fsize = scaleFont(rank+1) *scaleLength(maxWordLength);//Math.log(getRadius(rank)) // (Math.exp(text.length * 0.001));
-      var el = d3.select(t);
-      var p = d3.select(t.parentNode);
-      ;
-      p.append("foreignObject")
-          .attr('x', -width/2)
-          .attr('y', -width/2)
-          .attr("width", width)
-          .attr("height", width)
-        // .append("xhtml:container")
-        //   .attr('style',  'position:absolute;')
-          .append("xhtml:div")
-            .attr('style',   ' min-height: '+ width+'px; display: flex; align-items: center; justify-content: center; vertical-align: middle; text-align: center; word-wrap: normal; fill :#fff;  font-size:' + fsize + 'px;')
-            .html(text);    
-              //position:absolute; margin-right:-50%; left:50%; top:50%; transform: translate(-50%, -50%);
-      //el.remove(); 
-
-  };
-
-
   // add nodes to force
   force
     .nodes((nodesJson))
@@ -130,20 +102,36 @@ function ready(error, nodesJson, linksJson) {
     //.on("mouseout", mouseout)
     .call(force.drag);
 
+  // inserting text as foreignObjects (HTML)  
+  function longerString(champ, contender){
+        return (contender.length > champ.length) ? contender: champ;
+  }
+  var insertLinebreaks = function (t, text, rank) {
+      var width = getRadius(rank)*1.95;
+      var maxWordLength = text.split(" ").reduce(longerString).length;
+      var fsize = scaleFont(rank+1) *scaleLength(maxWordLength);
+      var el = d3.select(t);
+      var p = d3.select(t.parentNode);
+      p.append("foreignObject")
+          .attr('x', -width/2)
+          .attr('y', -width/2)
+          .attr("width", width)
+          .attr("height", width)
+        // .append("xhtml:container")
+        //   .attr('style',  'position:absolute;')
+          .append("xhtml:div")
+            .attr('style',   ' min-height: '+ width+'px; display: flex; align-items: center; justify-content: center; vertical-align: middle; text-align: center; word-wrap: normal; fill :#fff;  font-size:' + fsize + 'px;')
+            .html(text);    
+              //position:absolute; margin-right:-50%; left:50%; top:50%; transform: translate(-50%, -50%);
+  };
+
   node.append("circle")
     .attr("r", function(d) { 
       return scaleRadius(d.rank+1);//getRadius(d.rank);
     })
     .each(function(d,i){ insertLinebreaks(this, d.text, d.rank); });
 
-  var bounds = {
-      x: 0, // bounding box is 300 pixels from the left
-      y: 0, // bounding box is 400 pixels from the top
-      width: 100, // bounding box is 500 pixels across
-      height: 100 // bounding box is 600 pixels tall
-  };
-
- 
+  // prevent collision  
   var padding = 1; // separation between circles
   function collide(alpha) {
     var quadtree = d3.geom.quadtree(force.nodes());
@@ -171,6 +159,8 @@ function ready(error, nodesJson, linksJson) {
       });
     };
   }
+
+  // window resizing
   function resize() {
   	wWidth = window.innerWidth, 
   	wHeight = window.innerHeight-20;
@@ -184,6 +174,7 @@ function ready(error, nodesJson, linksJson) {
   resize;
   d3.select(window).on("resize", resize);
 
+  // force layout tick
   function tick() {
     link
       .attr("x1", function (d) {
@@ -205,15 +196,12 @@ function ready(error, nodesJson, linksJson) {
 
   force
     .linkDistance(function(d){
-      //console.log((d.source.rank));
-      //console.log(getRadius(d.source.rank));
       return (getRadius(d.source.rank) +
               getRadius(d.target.rank) +
               (d.value-1) * 20)
     })
     .on("tick", tick)
     .start();
- 
 }
 
 
