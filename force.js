@@ -1,11 +1,28 @@
-var width=1000;
-var height=800;
-var color = d3.scale.category10();
+var width =window.innerWidth,
+	height=window.innerHeight-20;
 
+var svg = d3.select("body")
+   .append("div")
+   // container fopr responsive svhg resizing
+   .classed("svg-container", true)
+   .append("svg")
+      .classed("svg-content-responsive", true)
+       // .attr({
+       //   "width": "100%",
+       //   "height": "100%"
+       // })
+      .attr("viewBox", "0 0 " + 600*(width/height) + " " + 900*(height/width))//.attr("viewBox", "0 0 " + width + " " + height )
+      //.attr("viewBox", "0 0 " + width + " " + height)//.attr("viewBox", "0 0 " + width + " " + height )
+      .attr("preserveAspectRatio", "xMidYMid meet")
+      .attr("pointer-events", "all");
+  // /  .call(d3.behavior.zoom().on("zoom", resize));
 
-var svg = d3.select("body").append("svg")
-	.attr("width", width)
-	.attr("height", height);
+// not used, maybe for zooming?
+function redraw() {
+  vis.attr("transform",
+      "translate(" + d3.event.translate + ")"
+      + " scale(" + d3.event.scale + ")");
+}
 
 function getRadius(rank){
   return 20 + Math.exp(6 - rank) * 0.2;
@@ -21,13 +38,15 @@ var scaleLength = d3.scale.log()
                     .domain([1,20])
                     .range([1,0.15]);
 
+var color = d3.scale.category10();
 
 var force = d3.layout.force()
-    .gravity(.04)
+    .gravity(.09)
     .charge(-300)
     .linkStrength(0.3)
     .friction(0.9)
-    .size([width, height]);
+    //.size([width, height]);
+    .size([900, 900*(height/width)]);
 
 queue()
   .defer(d3.csv, "data/nodes1.csv", function(d){
@@ -176,6 +195,18 @@ function ready(error, nodesJson, linksJson) {
     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
     node.each(collide(0.5)); 
   }
+
+  function resize() {
+  	width = window.innerWidth, 
+  	height = window.innerHeight-20;
+  	svg.attr("viewBox", "0 0 " +  900 + " " + 900*(height/width));
+  	force.size([width, height]);
+  	console.log(svg.attr("viewBox"));
+  	console.log(force.size());
+  }
+//  svg.call(d3.behavior.zoom().on("zoom", resize));
+  resize;
+  d3.select(window).on("resize", resize);
 
   force
     .linkDistance(function(d){
