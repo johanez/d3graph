@@ -1,5 +1,5 @@
-var wWidth =window.innerWidth,
-	wHeight=window.innerHeight-20;
+var wWidth =document.documentElement.clientWidth,
+	wHeight=document.documentElement.clientHeight-20;
 var fixWidth = 1200,
 	fixHeight= fixWidth*(wHeight/wWidth);
 
