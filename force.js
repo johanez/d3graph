@@ -1,11 +1,24 @@
-var width=1000;
-var height=800;
-var color = d3.scale.category10();
+var wWidth =document.documentElement.clientWidth,
+	  wHeight=document.documentElement.clientHeight-20;
+var fixWidth = 1200,
+	fixHeight= fixWidth*(wHeight/wWidth);
 
 
-var svg = d3.select("body").append("svg")
-	.attr("width", width)
-	.attr("height", height);
+var svg = d3.select("body")
+   .append("svg:svg")
+      .classed("svg-content-responsive", true)
+      // aspect acording to window, widthFixed for the viewbox  scaling
+      .attr("viewBox", "0 0 " + fixWidth + " " + fixHeight)
+      .attr("preserveAspectRatio", "xMaxYMin meet")
+      .attr("pointer-events", "all");
+  // /  .call(d3.behavior.zoom().on("zoom", resize));
+
+// not used, maybe for zooming?
+function redraw() {
+  vis.attr("transform",
+      "translate(" + d3.event.translate + ")"
+      + " scale(" + d3.event.scale + ")");
+}
 
 function getRadius(rank){
   return 20 + Math.exp(6 - rank) * 0.2;
@@ -21,13 +34,14 @@ var scaleLength = d3.scale.log()
                     .domain([1,20])
                     .range([1,0.15]);
 
+var color = d3.scale.category10();
 
 var force = d3.layout.force()
     .gravity(.04)
     .charge(-400)
     .linkStrength(0.5)
     .friction(0.9)
-    .size([width, height]);
+    .size([fixWidth, fixHeight]);
 
 queue()
   .defer(d3.csv, "data/nodes1.csv", function(d){
@@ -65,34 +79,18 @@ function ready(error, nodesJson, linksJson) {
         value: x.value
       };
     });
-
-  function longerString(champ, contender){
-        return (contender.length > champ.length) ? contender: champ;
-  }
-
-  var insertLinebreaks = function (t, text, rank) {
-      var width = getRadius(rank)*1.95;
-      // makes this word lenght!
-      var maxWordLength = text.split(" ").reduce(longerString).length;
-      var fsize = scaleFont(rank+1) *scaleLength(maxWordLength);//Math.log(getRadius(rank)) // (Math.exp(text.length * 0.001));
-      var el = d3.select(t);
-      var p = d3.select(t.parentNode);
-      ;
-      p.append("foreignObject")
-          .attr('x', -width/2)
-          .attr('y', -width/2)
-          .attr("width", width)
-          .attr("height", width)
-        // .append("xhtml:container")
-        //   .attr('style',  'position:absolute;')
-          .append("xhtml:div")
-            .attr('style',   ' min-height: '+ width+'px; display: flex; align-items: center; justify-content: center; vertical-align: middle; text-align: center; word-wrap: normal; fill :#fff;  font-size:' + fsize + 'px;')
-            .html(text);    
-              //position:absolute; margin-right:-50%; left:50%; top:50%; transform: translate(-50%, -50%);
-      //el.remove(); 
-
+  //
+  var linkedByIndex = {};
+  for (i = 0; i < nodesJson.length; i++) {
+      linkedByIndex[i + "," + i] = 1;
   };
-
+  // graph.links.forEach(function (d) {
+  //     linkedByIndex[d.source.index + "," + d.target.index] = 1;
+  //   });
+  // //This function looks up whether a pair are neighbours
+  // function neighboring(a, b) {
+  //     return linkedByIndex[a.index + "," + b.index];
+  // }
 
   // add nodes to force
   force
@@ -116,20 +114,36 @@ function ready(error, nodesJson, linksJson) {
     //.on("mouseout", mouseout)
     .call(force.drag);
 
+  // inserting text as foreignObjects (HTML)  
+  function longerString(champ, contender){
+        return (contender.length > champ.length) ? contender: champ;
+  }
+  var insertLinebreaks = function (t, text, rank) {
+      var width = getRadius(rank)*1.95;
+      var maxWordLength = text.split(" ").reduce(longerString).length;
+      var fsize = scaleFont(rank+1) *scaleLength(maxWordLength);
+      var el = d3.select(t);
+      var p = d3.select(t.parentNode);
+      p.append("foreignObject")
+          .attr('x', -width/2)
+          .attr('y', -width/2)
+          .attr("width", width)
+          .attr("height", width)
+        // .append("xhtml:container")
+        //   .attr('style',  'position:absolute;')
+          .append("xhtml:div")
+            .attr('style',   ' min-height: '+ width+'px; display: flex; align-items: center; justify-content: center; vertical-align: middle; text-align: center; word-wrap: normal; fill :#fff;  font-size:' + fsize + 'px;')
+            .html(text);    
+              //position:absolute; margin-right:-50%; left:50%; top:50%; transform: translate(-50%, -50%);
+  };
+
   node.append("circle")
     .attr("r", function(d) { 
       return scaleRadius(d.rank+1);//getRadius(d.rank);
     })
     .each(function(d,i){ insertLinebreaks(this, d.text, d.rank); });
 
-  var bounds = {
-      x: 0, // bounding box is 300 pixels from the left
-      y: 0, // bounding box is 400 pixels from the top
-      width: 100, // bounding box is 500 pixels across
-      height: 100 // bounding box is 600 pixels tall
-  };
-
- 
+  // prevent collision  
   var padding = 1; // separation between circles
   function collide(alpha) {
     var quadtree = d3.geom.quadtree(force.nodes());
@@ -158,6 +172,21 @@ function ready(error, nodesJson, linksJson) {
     };
   }
 
+  // window resizing
+  function resize() {
+  	wWidth = window.innerWidth, 
+  	wHeight = window.innerHeight-20;
+  	fixHeight= fixWidth*(wHeight/wWidth);
+  	svg.attr("viewBox", "0 0 " + fixWidth + " " +fixHeight);
+  	force.size([fixWidth,fixHeight]);
+  	console.log(svg.attr("viewBox"));
+  	console.log(force.size());
+  }
+
+  resize;
+  d3.select(window).on("resize", resize);
+
+  // force layout tick
   function tick() {
     link
       .attr("x1", function (d) {
@@ -179,15 +208,12 @@ function ready(error, nodesJson, linksJson) {
 
   force
     .linkDistance(function(d){
-      //console.log((d.source.rank));
-      //console.log(getRadius(d.source.rank));
-      return (scaleRadius(d.source.rank+1) +
-              scaleRadius(d.target.rank+1) +
-              (d.value-1) * 10)
+      return (getRadius(d.source.rank) +
+              getRadius(d.target.rank) +
+              (d.value-1) * 20)
     })
     .on("tick", tick)
     .start();
- 
 }
 
 
