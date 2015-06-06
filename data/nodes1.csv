@@ -1,41 +1,41 @@
-index,id,name,group,rank
-0,jo,Johannes Eberenz,jo,0
-1,geo,Geo- Information,geo,1
-2,code,Code,code,1
-3,theater,Theater,theater,1
-4,wur,WUR,companies,2
-5,research_ass,Research Assistant,companies,1
-6,study_ass,Study Assitant Earth Observation,companies,4
-7,wag,Wageningen,places,3
-8,fiji,Fiji,places,4
-9,india,India,places,4
-10,berlin,Berlin,places,4
-11,hd,Heidelberg,places,4
-12,rs,Remote Sensing,geo,3
-13,r,R,code,3
-14,python,python,code,4
-15,linux,Linux,code,4
-16,js,JavaScript,code,4
-17,html,HTML,code,4
-18,css,CSS,code,5
-19,sql,SQL,code,5
-20,arcgis,ArcGIS,geo,3
-21,qgis,QGIS,geo,3
-22,postgis,PostGIS,geo,4
-23,erdas,ERDAS,geo,4
-24,gdal,gdal,geo,3
-25,impro,improvise,theater,3
-26,learn,learn,theater,3
-27,embrace,embrace,theater,3
-28,interact,interact,theater,3
-29,maps,Maps,places,3
-30,esa,ESA,companies,4
-31,italy,Italy,places,5
-32,italian,Italian,theater,5
-33,giz,GIZ,companies,5
-34,schwarz,Black Forest,places,4
-35,lindy,Lindy Hop,theater,4
-36,msc,Msc Geo- Information Science,edu,2
-37,ba,Bachelor Economics,edu,3
-38,msr,Courses Msc Natural Resource Management,edu,3
-39,erasmus,Erasmus,edu,4
+index,id,name,group,rank,visible
+0,jo,Johannes Eberenz,jo,1,1
+1,geo,Geo- Information,geo,2,0
+2,code,Code,code,2,0
+3,theater,Theater,theater,2,0
+4,wur,WUR,companies,3,0
+5,research_ass,Research Assistant,companies,2,0
+6,study_ass,Study Assitant Earth Observation,companies,5,0
+7,wag,Wageningen,places,4,0
+8,fiji,Fiji,places,5,0
+9,india,India,places,5,0
+10,berlin,Berlin,places,5,0
+11,hd,Heidelberg,places,5,0
+12,rs,Remote Sensing,geo,4,0
+13,r,R,code,4,0
+14,python,python,code,5,0
+15,linux,Linux,code,5,0
+16,js,JavaScript,code,5,0
+17,html,HTML,code,5,0
+18,css,CSS,code,6,0
+19,sql,SQL,code,6,0
+20,arcgis,ArcGIS,geo,4,0
+21,qgis,QGIS,geo,4,0
+22,postgis,PostGIS,geo,5,0
+23,erdas,ERDAS,geo,5,0
+24,gdal,gdal,geo,4,0
+25,impro,improvise,theater,4,0
+26,learn,learn,theater,4,0
+27,embrace,embrace,theater,4,0
+28,interact,interact,theater,4,0
+29,maps,Maps,places,4,0
+30,esa,ESA,companies,5,0
+31,italy,Italy,places,6,0
+32,italian,Italian,theater,6,0
+33,giz,GIZ,companies,6,0
+34,schwarz,Black Forest,places,5,0
+35,lindy,Lindy Hop,theater,5,0
+36,msc,Msc Geo- Information Science,edu,3,0
+37,ba,Bachelor Economics,edu,4,0
+38,msr,Courses Msc Natural Resource Management,edu,4,0
+39,erasmus,Erasmus,edu,5,0
