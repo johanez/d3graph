@@ -1,8 +1,12 @@
 var wWidth =document.documentElement.clientWidth,
 	  wHeight=document.documentElement.clientHeight-20;
-var fixWidth = 1200,
-	fixHeight= fixWidth*(wHeight/wWidth);
+var fixWidth = Math.min(1100, 1100*(wWidth/wHeight))
+	fixHeight= Math.min(1100,fixWidth*(wHeight/wWidth));
+console.log([fixWidth, fixHeight]);
 
+var pout =d3.select("p")
+  //.attr("style", "color:#000;")
+  .html("sad");
 
 var svg = d3.select("body")
    .append("svg:svg")
@@ -13,12 +17,13 @@ var svg = d3.select("body")
       .attr("pointer-events", "all");
   // /  .call(d3.behavior.zoom().on("zoom", resize));
 
+
 var scaleRadius = d3.scale.log()
                     .domain([1,6])
                     .range([100,15]);
 var scaleFont = d3.scale.log()
                     .domain([1,6])
-                    .range([85,10]);
+                    .range([85,16]);
 var scaleLength = d3.scale.log()
                     .domain([1,20])
                     .range([1,0.15]);
@@ -26,8 +31,8 @@ var scaleLength = d3.scale.log()
 var color = d3.scale.category10();
 
 var force = d3.layout.force()
-    .gravity(.05)
-    .charge(-100)
+    .gravity(.06)
+    .charge(-200)
     .linkStrength(0.3)
     .friction(0.9)
     .on("tick", tick)
@@ -36,15 +41,6 @@ var force = d3.layout.force()
  var  link, 
       node,
       nodetext;
-
-function resize() {
-  wWidth = window.innerWidth, 
-  wHeight = window.innerHeight-20;
-  fixHeight= fixWidth*(wHeight/wWidth);
-  svg.attr("viewBox", "0 0 " + fixWidth + " " +fixHeight);
-  force.size([fixWidth,fixHeight]);
-}
-d3.select(window).on("resize", resize);
 
 
 queue()
@@ -55,7 +51,8 @@ queue()
       text: d.name,
       group: d.group,
       rank: +d.rank,// convert "Length" column to number
-      visible: Boolean(+d.visible >0)
+      visible: Boolean(+d.visible >0),
+      clicked: Boolean(+d.clicked >0)
     };
   })
   .defer(d3.csv, "data/links2.csv", function(d){
@@ -87,11 +84,12 @@ function ready(error, nodesJson, linksJson) {
   });
   // save all connections in an array
   var linkedById = {};
-  for (i = 0; i < nodesJson.length; i++) {
-    linkedById[i + "," + i] = -1;
-  };
+  // for (i = 0; i < nodesJson.length; i++) {
+  //   linkedById[i + "," + i] = -1;
+  // };
   linksJson.forEach(function (d, i) {
     linkedById[d.source.id + "," + d.target.id] = i;
+    linkedById[d.target.id + "," + d.source.id] = i;
   
 
 
@@ -109,17 +107,23 @@ function ready(error, nodesJson, linksJson) {
   //   console.log(n);
   //   if (n.visible) visibleNodes.push(o);
   // })
-
+  force
+    .nodes(visibleNodes)
+    .links(visibleLinks)  
+  force.nodes()[0].fixed=true;
+  force.nodes()[0].x=fixWidth/2;
+  force.nodes()[0].y=fixHeight/2;
 
   function update(){
     force
       .nodes(visibleNodes)
       .links(visibleLinks)      
       .start();
-  console.log(force.nodes());
+
+
 
   link = svg.selectAll(".link")
-      .data(visibleLinks, function(d) { return d.target.id; });
+      .data(visibleLinks);//, function(d) { return d.target.id; });
       //.enter().append("line")
   link.exit().remove();
   link.enter().insert("line", ".node")
@@ -129,7 +133,7 @@ function ready(error, nodesJson, linksJson) {
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
 
-  console.log(linksJson);
+  // console.log(linksJson);
 
   node = svg.selectAll(".node")
       .data(force.nodes(), function(d) { return d.id; });
@@ -141,7 +145,7 @@ function ready(error, nodesJson, linksJson) {
       .style("fill", function(d) {
         return color(d.group); 
       })
-      .style("opacity", function(d){return 1-(d.rank*0.1)})
+      //.style("opacity", function(d){return 1-(d.rank*0.1)})
       .call(force.drag)
       .append("circle")
         .attr("r", function(d) { 
@@ -151,7 +155,7 @@ function ready(error, nodesJson, linksJson) {
         //.on("mouseout", mouseout)
         
 
-      console.log(node);
+      // console.log(node);
 
 
         
@@ -175,25 +179,41 @@ function ready(error, nodesJson, linksJson) {
 
   // make  neigbours visible 
   function mouseclick(d){
-    if (d3.event.defaultPrevented) return; 
-    console.log(d);
-    nodesJson.forEach(function(n){
-      if (neighboring(d,n)>-1 & !n.visible){
-        console.log(n.id);
-        console.log(neighboring(d,n));
-        console.log(linksJson[neighboring(d,n)]);
-        n.visible = true;
-        visibleNodes.push(n);
-        visibleLinks.push(linksJson[neighboring(d,n)]);
-      } 
-    });
-    update();
+    if (d3.event.defaultPrevented) return;
+    //if (d.id == "geo")
+    if (!d.clicked) {
+      //console.log("click " + d.id + d.clicked)
+      d.clicked=true;
+      // console.log(d);
+      nodesJson.forEach(function(n){
+        if (neighboring(d,n)>-1){
+  //        console.log(neighboring(d,n));
+          if(!n.visible){
+            n.visible = true;
+            visibleNodes.push(n);
+          } 
+        } 
+      });
+      visibleLinks = [];
+      linksJson.forEach(function(l){
+        if (l.target.visible & l.source.visible)
+          visibleLinks.push(l);
+      });
+      update();
+    }
   }
 
   function dblclick(d){
     if (d3.event.defaultPrevented) return; 
-    var visibleNodes = [nodesJson[0]];
-    var visibleLinks = [];
+    //console.log("double click " + d.id + d.clicked)
+    //d.clicked = false;
+    visibleNodes = [nodesJson[0]];
+    visibleLinks = [];
+    console.log(node);
+    nodesJson.forEach(function(n){
+      n.visible = false;
+      n.clicked = false;
+    });
     update();
   }
 
@@ -202,10 +222,25 @@ function ready(error, nodesJson, linksJson) {
   function mouseover(d){
     //console.log(d.id);
   }
-  function mouseover(d){
+  function mouseout(d){
     //console.log(d.id);
   }
 
+  function resize() {
+    wWidth = window.innerWidth, 
+    wHeight = window.innerHeight-20;
+    fixWidth = Math.min(1100, 1100*(wWidth/wHeight))
+    fixHeight= Math.min(1100, 1100*(wHeight/wWidth));
+    console.log([fixWidth, 1100*(wWidth/wHeight), fixHeight, 1100*wHeight/wWidth]);
+   // fixHeight= fixWidth*(wHeight/wWidth);
+    svg.attr("viewBox", "0 0 " + fixWidth + " " +fixHeight);
+    force.size([fixWidth,fixHeight]);
+   // pout.html=(fixWidth + " fh:" + fixHeight);
+    visibleNodes[0].x=fixWidth/2;
+    visibleNodes[0].y=fixHeight/2;
+    update();
+  }
+  d3.select(window).on("resize", resize);  
 
 
 }
@@ -255,7 +290,7 @@ function tick() {
     });
       
   node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-  node.each(collide(0.5)); 
+  node.each(collide(0.1)); 
 }
 
 // for finding the longest word

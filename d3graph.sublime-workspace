@@ -4,43 +4,120 @@
 		"selected_items":
 		[
 			[
-				"sock",
-				"sockapp"
+				"h",
+				"hidden"
+			],
+			[
+				"fix",
+				"fixHeight"
+			],
+			[
+				"fixd",
+				"fixWidth"
+			],
+			[
+				"fi",
+				"fixHeight"
+			],
+			[
+				"tr",
+				"true"
+			],
+			[
+				"up",
+				"update"
+			],
+			[
+				"vsis",
+				"visibleNodes"
+			],
+			[
+				"d",
+				"dblclick"
+			],
+			[
+				"con",
+				"console"
+			],
+			[
+				"link",
+				"linkedByIndex"
+			],
+			[
+				"links",
+				"linksJson"
+			],
+			[
+				"visible",
+				"visibleLinks"
+			],
+			[
+				"no",
+				"nodesJson"
+			],
+			[
+				"line",
+				"linkedByIndex"
+			],
+			[
+				"select",
+				"selectAll"
+			],
+			[
+				"vis",
+				"visibleNodes"
 			],
 			[
 				"fo",
-				"formattedName"
+				"forEach"
+			],
+			[
+				"lin",
+				"linkedByIndex"
+			],
+			[
+				"pr",
+				"previousValue"
+			],
+			[
+				"co",
+				"color"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"sock",
+				"sockapp"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "readme.md",
-			"settings":
-			{
-				"buffer_size": 19,
-				"line_ending": "Unix",
-				"name": "# D3 network graph"
-			}
-		},
-		{
-			"contents": "<!DOCTYPE html>\n<meta charset=\"utf-8\">\n<body> \n<style>\n.link {\n	stroke: #666;\n	opacity: 0.4;\n	stroke-width: 1.5px;\n	}\n.node circle {\n	stroke: #fff;\n	opacity: 0.4;\n	stroke-width: 1.5px;\n}\n	.node:not(:hover) .nodetext {\n	display: none;\n}\ntext {\n	font: 7px serif;\n	opacity: 0.4;\n	pointer-events: none;\n}\n</style>\n\n<script src=\"js/d3/\"></script>\n<script type=\"text/javascript\", src=\"js/force.js\"</script>\n\n </body>",
 			"file": "index.html",
-			"file_size": 430,
-			"file_write_time": 130774082849192493,
 			"settings":
 			{
-				"buffer_size": 410,
+				"buffer_size": 1003,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "js/force.js",
+			"file": "force.js",
 			"settings":
 			{
-				"buffer_size": 1530,
+				"buffer_size": 11053,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "adsfads ",
+			"settings":
+			{
+				"buffer_size": 8,
+				"line_ending": "Unix",
+				"name": "adsfads"
 			}
 		},
 		{
@@ -55,6 +132,40 @@
 				"read_only": true,
 				"scratch": true
 			}
+		},
+		{
+			"file": "data/links2.csv",
+			"settings":
+			{
+				"buffer_size": 889,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Package Control Messages\n========================\n\nBrowser Refresh:\n---------------\n\n  ______                                 \n  | ___ \\                                \n  | |_/ /_ __ _____      _____  ___ _ __ \n  | ___ \\ '__/ _ \\ \\ /\\ / / __|/ _ \\ '__|\n  | |_/ / | | (_) \\ V  V /\\__ \\  __/ |   \n  \\____/|_|  \\___/ \\_/\\_/ |___/\\___|_|   \n                                         \n                                         \n  ______      __               _         \n  | ___ \\    / _|             | |        \n  | |_/ /___| |_ _ __ ___  ___| |__      \n  |    // _ \\  _| '__/ _ \\/ __| '_ \\     \n  | |\\ \\  __/ | | | |  __/\\__ \\ | | |    \n  \\_| \\_\\___|_| |_|  \\___||___/_| |_|    \n                                         \n                                         \n                                         \n  Thanks for installing Browser Refresh!\n  \n  * * Important * *\n  To complete the installation make sure you add the necessary key bindings.\n  Go to \"Preferences  > Key Bindings - User\" in the menu and add the following:\n   \n  {\n      \"keys\": [\"command+shift+r\"], \"command\": \"browser_refresh\", \"args\": {\n          \"auto_save\": true,\n          \"delay\": 0.5,\n          \"activate_browser\": true,\n          \"browser_name\" : \"all\"\n      }\n  }\n  \n  For complete documentation please visit:\n  https://github.com/gcollazo/BrowserRefresh-Sublime\n  \n  Bug reports:\n  https://github.com/gcollazo/BrowserRefresh-Sublime/issues\n  \n  Twitter:\n  http://twitter.com/gcollazo\n  \n  ",
+			"settings":
+			{
+				"buffer_size": 1463,
+				"line_ending": "Unix",
+				"name": "Package Control Messages",
+				"scratch": true
+			}
+		},
+		{
+			"file": "/home/jo/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+			"settings":
+			{
+				"buffer_size": 450,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "data/nodes1.csv",
+			"settings":
+			{
+				"buffer_size": 1238,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
@@ -64,20 +175,28 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 159.0,
-		"last_filter": "ins",
+		"height": 392.0,
+		"last_filter": "p",
 		"selected_items":
 		[
 			[
-				"ins",
+				"p",
+				"Git: Push"
+			],
+			[
+				"qui",
+				"Git: Quick Commit"
+			],
+			[
+				"add",
+				"Git: Add..."
+			],
+			[
+				"inst",
 				"Package Control: Install Package"
 			],
 			[
-				"pull",
-				"Git: Pull"
-			],
-			[
-				"pus",
+				"push",
 				"Git: Push"
 			],
 			[
@@ -85,12 +204,28 @@
 				"Git: Quick Commit"
 			],
 			[
-				"add",
+				"A",
 				"Git: Add Current File"
 			],
 			[
-				"qui",
-				"Git: Quick Commit"
+				"git add",
+				"Git: Add..."
+			],
+			[
+				"pus",
+				"Git: Push"
+			],
+			[
+				"psu",
+				"Git: Push"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"pull",
+				"Git: Pull"
 			],
 			[
 				"a",
@@ -101,19 +236,11 @@
 				"Git: Init"
 			],
 			[
-				"push",
-				"Git: Push"
-			],
-			[
 				"ad",
 				"Git: Add Current File"
 			],
 			[
 				"git ad",
-				"Git: Add Current File"
-			],
-			[
-				"git add",
 				"Git: Add Current File"
 			],
 			[
@@ -129,7 +256,7 @@
 				"Git: Push"
 			]
 		],
-		"width": 449.0
+		"width": 467.0
 	},
 	"console":
 	{
@@ -148,12 +275,27 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
+	"expanded_folders":
+	[
+		"/home/jo/dev/d3graph",
+		"/home/jo/dev/d3graph/data",
+		"/home/jo/dev/d3graph/js",
+		"/home/jo/dev/d3graph/js/d3"
+	],
 	"file_history":
 	[
+		"/home/jo/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/jo/dev/d3graph/data/links2.csv",
+		"/home/jo/dev/d3graph/data/links.csv",
+		"/home/jo/dev/d3graph/js/az.js",
+		"/home/jo/dev/d3map/index.html",
+		"/home/jo/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/jo/dev/d3graph/readme.md",
+		"/home/jo/dev/d3graph/js/force.js",
+		"/home/jo/dev/d3graph/data/example.json",
 		"/home/jo/dev/d3graph/R/d3graph.Rproj",
 		"/home/jo/dev/d3graph/data/nodes1.csv",
 		"/home/jo/dev/d3graph/fn.js",
-		"/home/jo/dev/d3map/index.html",
 		"/home/jo/dev/d3map/README.md",
 		"/home/jo/Documents/dev/timelinejs/d3js_map_zoom.html",
 		"/home/jo/Documents/dev/timelinejs/d3jstimline.html",
@@ -174,7 +316,6 @@
 		"/home/jo/Documents/dev/quicksmoothie/public/demo.html",
 		"/home/jo/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
 		"/home/jo/Documents/dev/quicksmoothie/public/js/gyro.js",
-		"/home/jo/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
 		"/home/jo/Documents/dev/remotephone/public/assets/js/motion.js",
 		"/home/jo/Documents/dev/quicksmoothie/public/example1.html",
 		"/home/jo/Documents/dev/remotephone/app.js",
@@ -207,6 +348,42 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"1000",
+			"900",
+			"1200",
+			"conso",
+			"con",
+			"maps",
+			"linkedByIndex",
+			"research_ass",
+			"wur",
+			"opac",
+			"console",
+			"conso",
+			"+ 1",
+			"+1",
+			"+ 1",
+			"scaleRadius(d.rank+1)",
+			"rank",
+			"rank+1",
+			" console.log(node)",
+			"console",
+			"getR",
+			"console",
+			"if",
+			"mouseclick",
+			"rb",
+			"console",
+			"getComputedTextLength",
+			"weight",
+			"color",
+			"weig",
+			"weigt",
+			"sourceNode",
+			"linkD",
+			"console",
+			"tick",
+			"start",
 			",",
 			"Open Sans",
 			"f",
@@ -226,9 +403,11 @@
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": true,
+		"regex": false,
 		"replace_history":
 		[
+			"",
+			"scaleRadius(d.rank)",
 			",\\t\\t\\t",
 			",\\t"
 		],
@@ -238,56 +417,33 @@
 		"whole_word": false,
 		"wrap": true
 	},
+	"folders":
+	[
+		{
+			"path": "/home/jo/dev/d3graph"
+		}
+	],
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 6,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "readme.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 19,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								19,
-								19
-							]
-						],
-						"settings":
-						{
-							"auto_name": "# D3 network graph",
-							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 2.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"file": "index.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 410,
+						"buffer_size": 1003,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								330,
-								330
+								690,
+								690
 							]
 						],
 						"settings":
@@ -295,38 +451,68 @@
 							"syntax": "Packages/HTML/HTML.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 306.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "js/force.js",
+					"buffer": 1,
+					"file": "force.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1530,
+						"buffer_size": 11053,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								188,
-								188
+								135,
+								135
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8,
+								8
+							]
+						],
+						"settings":
+						{
+							"auto_name": "adsfads",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -351,10 +537,124 @@
 							"syntax": "Packages/JavaScript/JSON.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 612.0,
+						"translation.y": 1377.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "data/links2.csv",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 889,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 34.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1463,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1024,
+								1024
+							]
+						],
+						"settings":
+						{
+							"auto_indent": false,
+							"spell_check": true,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/home/jo/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 450,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								384,
+								384
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "data/nodes1.csv",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1238,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								454,
+								454
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -445,7 +745,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 162.0,
+	"side_bar_width": 195.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
