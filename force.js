@@ -1,7 +1,8 @@
 var wWidth =document.documentElement.clientWidth,
-	  wHeight=document.documentElement.clientHeight-20;
-var fixWidth = Math.min(1100, 1100*(wWidth/wHeight))
-	fixHeight= Math.min(1100,fixWidth*(wHeight/wWidth));
+	  wHeight=document.documentElement.clientHeight-10;
+var fixPix = 700;
+var fixWidth = Math.min(fixPix, fixPix*(wWidth/wHeight))
+	fixHeight= Math.min(fixPix,fixWidth*(wHeight/wWidth));
 console.log([fixWidth, fixHeight]);
 
 var pout =d3.select("p")
@@ -13,7 +14,7 @@ var svg = d3.select("body")
       .classed("svg-content-responsive", true)
       // aspect acording to window, widthFixed for the viewbox  scaling
       .attr("viewBox", "0 0 " + fixWidth + " " + fixHeight)
-      .attr("preserveAspectRatio", "xMaxYMin meet")
+      //.attr("preserveAspectRatio", "xMaxYMin meet")
       .attr("pointer-events", "all");
   // /  .call(d3.behavior.zoom().on("zoom", resize));
 
@@ -26,7 +27,7 @@ var scaleFont = d3.scale.log()
                     .range([85,16]);
 var scaleLength = d3.scale.log()
                     .domain([1,20])
-                    .range([1,0.15]);
+                    .range([1,0.12]);
 
 var color = d3.scale.category10();
 
@@ -117,61 +118,45 @@ function ready(error, nodesJson, linksJson) {
   function update(){
     force
       .nodes(visibleNodes)
-      .links(visibleLinks)      
-      .start();
-
-
-
-  link = svg.selectAll(".link")
-      .data(visibleLinks);//, function(d) { return d.target.id; });
-      //.enter().append("line")
-  link.exit().remove();
-  link.enter().insert("line", ".node")
-      .attr("class", "link")
-      .attr("x1", function(d) { return d.source.x; })
-      .attr("y1", function(d) { return d.source.y; })
-      .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; });
-
-  // console.log(linksJson);
-
-  node = svg.selectAll(".node")
-      .data(force.nodes(), function(d) { return d.id; });
-  node.exit().remove();
-  node.enter().append("g")
-      .attr("class", "node")
-      // .attr("cx", function(d) { return d.x; })
-      // .attr("cy", function(d) { return d.y; })
-      .style("fill", function(d) {
-        return color(d.group); 
-      })
-      //.style("opacity", function(d){return 1-(d.rank*0.1)})
-      .call(force.drag)
-      .append("circle")
-        .attr("r", function(d) { 
-          return scaleRadius(d.rank);
-        })
-        .each(function(d,i){insertTextDivs(this, d.text, d.rank); });
-        //.on("mouseout", mouseout)
-        
-
-      // console.log(node);
-
-
-        
-  nodetext = svg.selectAll(".nodetext")
-    .on("mouseover", mouseover)
-    .on("dblclick", dblclick)
-    .on("click", mouseclick)
-    .on("mouseout", mouseout);
-    
-
-    force
+      .links(visibleLinks)
       .linkDistance(function(d){
         return (scaleRadius(d.source.rank ) +
                 scaleRadius(d.target.rank ) +
                 (d.value-1) * 20);
-      })
+      })      
+      .start();
+
+    link = svg.selectAll(".link")
+        .data(visibleLinks);
+    link.exit().remove();
+    link.enter().insert("line", ".node")
+        .attr("class", "link")
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+
+    node = svg.selectAll(".node")
+        .data(force.nodes(), function(d) { return d.id; });
+    node.exit().remove();
+    node.enter().append("g")
+        .attr("class", "node")
+        .style("fill", function(d) {
+          return color(d.group); 
+        })
+        .call(force.drag)
+        .append("circle")
+          .attr("r", function(d) { 
+            return scaleRadius(d.rank);
+          })
+          .each(function(d,i){insertTextDivs(this, d.text, d.rank); });
+
+    nodetext = svg.selectAll(".nodetext")
+      .on("mouseover", mouseover)
+      .on("dblclick", dblclick)
+      .on("click", mouseclick)
+      .on("mouseout", mouseout);
    }
 
    update();
@@ -179,6 +164,7 @@ function ready(error, nodesJson, linksJson) {
 
   // make  neigbours visible 
   function mouseclick(d){
+    force.nodes()[0].fixed=true;
     if (d3.event.defaultPrevented) return;
     //if (d.id == "geo")
     if (!d.clicked) {
@@ -214,6 +200,7 @@ function ready(error, nodesJson, linksJson) {
       n.visible = false;
       n.clicked = false;
     });
+    force.nodes()[0].visible=true;
     update();
   }
 
@@ -227,17 +214,15 @@ function ready(error, nodesJson, linksJson) {
   }
 
   function resize() {
-    wWidth = window.innerWidth, 
-    wHeight = window.innerHeight-20;
-    fixWidth = Math.min(1100, 1100*(wWidth/wHeight))
-    fixHeight= Math.min(1100, 1100*(wHeight/wWidth));
-    console.log([fixWidth, 1100*(wWidth/wHeight), fixHeight, 1100*wHeight/wWidth]);
-   // fixHeight= fixWidth*(wHeight/wWidth);
+    wWidth = window.innerWidth;
+    wHeight = window.innerHeight-10;
+    fixWidth = Math.min(fixPix, fixPix*(wWidth/wHeight))
+    fixHeight= Math.min(fixPix, fixPix*(wHeight/wWidth));
+    console.log([fixWidth, fixPix*(wWidth/wHeight), fixHeight, fixPix*wHeight/wWidth]);
     svg.attr("viewBox", "0 0 " + fixWidth + " " +fixHeight);
     force.size([fixWidth,fixHeight]);
-   // pout.html=(fixWidth + " fh:" + fixHeight);
-    visibleNodes[0].x=fixWidth/2;
-    visibleNodes[0].y=fixHeight/2;
+    // allow  node to drift back to center
+    force.nodes()[0].fixed=false;
     update();
   }
   d3.select(window).on("resize", resize);  
@@ -291,6 +276,8 @@ function tick() {
       
   node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
   node.each(collide(0.1)); 
+
+ // if (force.nodes()[0].fixed===false) 
 }
 
 // for finding the longest word
