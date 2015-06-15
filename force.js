@@ -1,6 +1,6 @@
 var wWidth =document.documentElement.clientWidth,
-	  wHeight=document.documentElement.clientHeight-10;
-var fixPix = 700;
+	  wHeight=document.documentElement.clientHeight-20;
+var fixPix = 1200;
 var fixWidth = Math.min(fixPix, fixPix*(wWidth/wHeight))
 	fixHeight= Math.min(fixPix,fixWidth*(wHeight/wWidth));
 console.log([fixWidth, fixHeight]);
@@ -14,10 +14,10 @@ var svg = d3.select("body")
       .classed("svg-content-responsive", true)
       // aspect acording to window, widthFixed for the viewbox  scaling
       .attr("viewBox", "0 0 " + fixWidth + " " + fixHeight)
-      //.attr("preserveAspectRatio", "xMaxYMin meet")
+      //.attr("preserveAspectRatio", "xMaxYMin meet") // not needed
       .attr("pointer-events", "all");
-  // /  .call(d3.behavior.zoom().on("zoom", resize));
-
+var tt = svg.append("circle")
+    .attr("r", 6);
 
 var scaleRadius = d3.scale.log()
                     .domain([1,6])
@@ -53,7 +53,8 @@ queue()
       group: d.group,
       rank: +d.rank,// convert "Length" column to number
       visible: Boolean(+d.visible >0),
-      clicked: Boolean(+d.clicked >0)
+      clicked: Boolean(+d.clicked >0),
+      tt: d.tt
     };
   })
   .defer(d3.csv, "data/links2.csv", function(d){
@@ -91,10 +92,6 @@ function ready(error, nodesJson, linksJson) {
   linksJson.forEach(function (d, i) {
     linkedById[d.source.id + "," + d.target.id] = i;
     linkedById[d.target.id + "," + d.source.id] = i;
-  
-
-
-
   });
   //console.log(linkedById);
   //This function looks up whether a pair are neighbours
@@ -102,7 +99,7 @@ function ready(error, nodesJson, linksJson) {
        return linkedById[a.id + "," + b.id];
   }
 
-  var visibleNodes = [nodesJson[0]];
+  var visibleNodes = [nodesJson[0], nodesJson[1]];
   var visibleLinks = [];
   // nodesJson.forEach(function(n){
   //   console.log(n);
@@ -114,6 +111,9 @@ function ready(error, nodesJson, linksJson) {
   force.nodes()[0].fixed=true;
   force.nodes()[0].x=fixWidth/2;
   force.nodes()[0].y=fixHeight/2;
+  force.nodes()[1].fixed=true;
+  force.nodes()[1].x=fixWidth*4/5;
+  force.nodes()[1].y=fixHeight/2;
 
   function update(){
     force
@@ -136,29 +136,32 @@ function ready(error, nodesJson, linksJson) {
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 
-
     node = svg.selectAll(".node")
         .data(force.nodes(), function(d) { return d.id; });
     node.exit().remove();
     node.enter().append("g")
         .attr("class", "node")
         .style("fill", function(d) {
-          return color(d.group); 
+          if (d.group!="quote") return color(d.group); 
         })
         .call(force.drag)
         .append("circle")
+          .attr("id", function(d){return "c"+d.id})
           .attr("r", function(d) { 
             return scaleRadius(d.rank);
           })
-          .each(function(d,i){insertTextDivs(this, d.text, d.rank); });
+          .each(function(d,i){insertTextDivs(this, d.id, d.text, d.rank); });
+    //text circle extra styles
+    svg.select("#cquote")
+      .style("opacity", 0)
+      .attr("stroke-width",0);
 
     nodetext = svg.selectAll(".nodetext")
       .on("mouseover", mouseover)
       .on("dblclick", dblclick)
       .on("click", mouseclick)
       .on("mouseout", mouseout);
-   }
-
+    }
    update();
   //resize;
 
@@ -185,15 +188,20 @@ function ready(error, nodesJson, linksJson) {
         if (l.target.visible & l.source.visible)
           visibleLinks.push(l);
       });
-      update();
+      force.nodes()[1].text=d.tt;
+      console.log(visibleNodes[1].text);      
     }
+    d3.selectAll("#quote").html(d.tt);
+    update();
   }
 
+  // reste graph
   function dblclick(d){
     if (d3.event.defaultPrevented) return; 
     //console.log("double click " + d.id + d.clicked)
     //d.clicked = false;
     visibleNodes = [nodesJson[0]];
+    var visibleNodes = [nodesJson[0], nodesJson[1]];
     visibleLinks = [];
     console.log(node);
     nodesJson.forEach(function(n){
@@ -201,16 +209,27 @@ function ready(error, nodesJson, linksJson) {
       n.clicked = false;
     });
     force.nodes()[0].visible=true;
+    force.nodes()[1].visible=true;
     update();
   }
 
-
-
   function mouseover(d){
-    //console.log(d.id);
+    svg.select("#c"+d.id).transition()
+      .duration(250)
+      .attr("r", function(d) {return scaleRadius(d.rank)+5});
+    // svg.select("#"+d.id).transition()
+    //   .duration(250)
+    //   .attr("style", function(d) {
+    //     var maxWordLength = d.text.split(" ").reduce(longerString).length;
+    //     var fsize = scaleFont(d.rank) *scaleLength(maxWordLength) +20;
+    //     return "font-size:"+ fsize+"px";
+    //   });//
   }
   function mouseout(d){
-    //console.log(d.id);
+    svg.select("#c"+d.id).transition()
+      .duration(250)
+
+      .attr("r", function(d){return scaleRadius(d.rank)});
   }
 
   function resize() {
@@ -223,6 +242,9 @@ function ready(error, nodesJson, linksJson) {
     force.size([fixWidth,fixHeight]);
     // allow  node to drift back to center
     force.nodes()[0].fixed=false;
+  //  force.nodes()[1].fixed=true;
+    force.nodes()[1].x=fixWidth*4/5;
+    force.nodes()[1].y=fixHeight/2;
     update();
   }
   d3.select(window).on("resize", resize);  
@@ -285,12 +307,14 @@ function longerString(champ, contender){
       return (contender.length > champ.length) ? contender: champ;
 }
 // inserting text as foreignObjects (HTML)  
-function insertTextDivs(t, text, rank) {
+function insertTextDivs(t, id, text, rank) {
     var width = scaleRadius(rank)*1.95;
     var maxWordLength = text.split(" ").reduce(longerString).length;
     var fsize = scaleFont(rank) *scaleLength(maxWordLength);
     var el = d3.select(t);
+    console.log(el);
     var p = d3.select(t.parentNode);
+    console.log(p);
     p.append("foreignObject")
         .attr('x', -width/2)
         .attr('y', -width/2)
@@ -300,6 +324,7 @@ function insertTextDivs(t, text, rank) {
       //   .attr('style',  'position:absolute;')
         .append("xhtml:div")
           .attr('class', 'nodetext')
+          .attr('id', id)
           .attr('style', 'min-height: '+ width+'px; font-size:' + fsize + 'px;')
           .html(text);    
             //position:absolute; margin-right:-50%; left:50%; top:50%; transform: translate(-50%, -50%);
